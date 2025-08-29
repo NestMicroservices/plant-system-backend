@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
+
+import { PlantEntity } from '../entities/plant.entity';
 import { PrismaService } from '../prisma.service';
-import { PlantEntity } from 'src/data/entities/plant.entity';
-import { maPlantToEntity } from '../mappers/entity-mappers';
 
 @Injectable()
 export class PlantRepository {
@@ -11,7 +11,7 @@ export class PlantRepository {
     const plants = await this.prisma.plant.findMany({
       include: { operations: true },
     });
-    return plants.map(maPlantToEntity);
+    return plants.map((p) => new PlantEntity(p));
   }
 
   async findById(id: number): Promise<PlantEntity | undefined> {
@@ -19,13 +19,13 @@ export class PlantRepository {
       where: { id },
       include: { operations: { include: { costConfigs: true } } },
     });
-    return plant ? maPlantToEntity(plant) : undefined;
+    return plant ? new PlantEntity(plant) : undefined;
   }
 
   async create(entity: PlantEntity): Promise<PlantEntity> {
     const data = { name: entity.name };
     const plant = await this.prisma.plant.create({ data });
-    return maPlantToEntity(plant);
+    return new PlantEntity(plant);
   }
 
   async update(
@@ -36,7 +36,7 @@ export class PlantRepository {
       where: { id },
       data: entity,
     });
-    return plant ? maPlantToEntity(plant) : undefined;
+    return plant ? new PlantEntity(plant) : undefined;
   }
 
   async delete(id: number): Promise<boolean> {

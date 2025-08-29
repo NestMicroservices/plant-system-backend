@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
+
+import { CostConfigEntity } from '../entities/costConfig.entity';
 import { PrismaService } from '../prisma.service';
-import { CostConfigEntity } from 'src/data/entities/costConfig.entity';
 
 @Injectable()
 export class CostConfigRepository {
