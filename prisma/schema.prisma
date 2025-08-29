@@ -10,7 +10,7 @@ datasource db {
 
 model Plant {
   id         Int         @id @default(autoincrement())
-  name       String
+  name       String      @unique
   operations Operation[]
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
@@ -27,6 +27,7 @@ model Operation {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 
+  @@unique([name, plantId])
   @@map("operation")
 }
 
