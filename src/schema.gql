@@ -90,9 +90,24 @@ type Query {
 }
 
 type Mutation {
+  createCostConfig(createCostConfigInput: CreateCostConfigInput!): CostConfig!
+  updateCostConfig(updateCostConfigInput: UpdateCostConfigInput!): CostConfig!
+  deleteCostConfig(id: Int!): MutationResponse!
   createOperation(createOperationInput: CreateOperationInput!): Operation!
   updateOperation(updateOperationInput: updateOperationInput!): Operation!
   deleteOperation(id: Int!): MutationResponse!
+}
+
+input CreateCostConfigInput {
+  operationId: Int!
+  volume: Int!
+  cost: Float!
+}
+
+input UpdateCostConfigInput {
+  id: Int!
+  volume: Int
+  cost: Float!
 }
 
 input CreateOperationInput {
