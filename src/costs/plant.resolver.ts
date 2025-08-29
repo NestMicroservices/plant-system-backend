@@ -3,21 +3,16 @@ import {
   Int,
   Parent,
   Query,
-  Resolver,
   ResolveField,
+  Resolver,
 } from '@nestjs/graphql';
 
-import { CostConfigRepository } from '../data/repositories/cost-config.repository';
 import { PlantRepository } from '../data/repositories/plant.repository';
-import { CostConfig } from './models/cost-config.model';
 import { Plant } from './models/plant.model';
 
 @Resolver(() => Plant)
 export class PlantResolver {
-  constructor(
-    private readonly plantRepository: PlantRepository,
-    private readonly costConfigRepository: CostConfigRepository,
-  ) {}
+  constructor(private readonly plantRepository: PlantRepository) {}
 
   @Query(() => [Plant])
   async plants() {
@@ -29,12 +24,6 @@ export class PlantResolver {
   async plantById(@Args('id', { type: () => Int }) id: number) {
     const entity = await this.plantRepository.findById(id);
     return entity ?? null;
-  }
-
-  @Query(() => [CostConfig])
-  async costConfigs(): Promise<CostConfig[]> {
-    const entities = await this.costConfigRepository.findAll();
-    return entities.map((e) => ({ ...e }));
   }
 
   @ResolveField(() => [Number], {

@@ -82,11 +82,11 @@ type Plant {
 
 type Query {
   books: [Book!]!
-  plants: [Plant!]!
-  plantById(id: Int!): Plant
   costConfigs: [CostConfig!]!
   operations: [Operation!]!
   operationById(id: Int!): Operation
+  plants: [Plant!]!
+  plantById(id: Int!): Plant
 }
 
 type Mutation {
