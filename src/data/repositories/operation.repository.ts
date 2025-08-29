@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException } from '@nestjs/common';
 
 import { OperationEntity } from '../entities/operation.entity';
 import { PrismaService } from '../prisma.service';
+import { Prisma } from 'generated/prisma';
 
 @Injectable()
 export class OperationRepository {
@@ -23,13 +24,25 @@ export class OperationRepository {
   }
 
   async create(entity: OperationEntity): Promise<OperationEntity> {
-    const data = {
-      name: entity.name,
-      plantId: entity.plantId,
-    };
-    console.log({ data });
-    const result = await this.prisma.operation.create({ data });
-    return new OperationEntity(result);
+    try {
+      const result = await this.prisma.operation.create({
+        data: {
+          name: entity.name,
+          plantId: entity.plantId,
+        },
+      });
+      return new OperationEntity(result);
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
+        throw new ConflictException(
+          'An operation with this name already exists for this plant.',
+        );
+      }
+      throw error;
+    }
   }
 
   async update(
