@@ -33,14 +33,7 @@ export class OperationRepository {
       });
       return new OperationEntity(result);
     } catch (error) {
-      if (
-        error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === 'P2002'
-      ) {
-        throw new ConflictException(
-          'An operation with this name already exists for this plant.',
-        );
-      }
+      this.handleError(error);
       throw error;
     }
   }
@@ -48,12 +41,17 @@ export class OperationRepository {
   async update(
     id: number,
     entity: Partial<OperationEntity>,
-  ): Promise<OperationEntity | undefined> {
-    const result = await this.prisma.operation.update({
-      where: { id },
-      data: entity,
-    });
-    return result ? new OperationEntity(result) : undefined;
+  ): Promise<OperationEntity> {
+    try {
+      const result = await this.prisma.operation.update({
+        where: { id },
+        data: entity,
+      });
+      return new OperationEntity(result);
+    } catch (error) {
+      this.handleError(error);
+      throw error;
+    }
   }
 
   async delete(id: number): Promise<boolean> {
@@ -62,6 +60,17 @@ export class OperationRepository {
       return operation ? true : false;
     } catch {
       return false;
+    }
+  }
+
+  private handleError(error: unknown) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === 'P2002'
+    ) {
+      throw new ConflictException(
+        'An operation with this name already exists for this plant.',
+      );
     }
   }
 }

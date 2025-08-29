@@ -54,6 +54,11 @@ type Operation {
   costConfigs: [CostConfig!]
 }
 
+type MutationResponse {
+  success: Boolean!
+  message: String
+}
+
 """Represents a plant entity."""
 type Plant {
   """Unique identifier for the plant."""
@@ -86,9 +91,16 @@ type Query {
 
 type Mutation {
   createOperation(createOperationInput: CreateOperationInput!): Operation!
+  updateOperation(updateOperationInput: updateOperationInput!): Operation!
+  deleteOperation(id: Int!): MutationResponse!
 }
 
 input CreateOperationInput {
   plantId: Int!
+  name: String!
+}
+
+input updateOperationInput {
+  id: Int!
   name: String!
 }

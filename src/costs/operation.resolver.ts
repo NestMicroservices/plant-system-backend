@@ -4,6 +4,8 @@ import { OperationRepository } from 'src/data/repositories/operation.repository'
 import { Operation } from './models/operation.model';
 import { CreateOperationInput } from './dtos/inputs/create-operation.input';
 import { OperationEntity } from 'src/data/entities/operation.entity';
+import { updateOperationInput } from './dtos/inputs/update-operation.input';
+import { MutationResponse } from './dtos/mutation-response';
 
 @Resolver(() => Operation)
 export class OperationResolver {
@@ -18,6 +20,31 @@ export class OperationResolver {
       new OperationEntity(createOperationInput),
     );
     return entitie;
+  }
+
+  @Mutation(() => Operation)
+  async updateOperation(
+    @Args('updateOperationInput')
+    updateOperationInput: updateOperationInput,
+  ): Promise<Operation> {
+    const { id, ...rest } = updateOperationInput;
+    const entitie = await this.operationRepository.update(
+      id,
+      new OperationEntity(rest),
+    );
+
+    return entitie;
+  }
+
+  @Mutation(() => MutationResponse)
+  async deleteOperation(
+    @Args('id', { type: () => Int }) id: number,
+  ): Promise<MutationResponse> {
+    const isSuccess = await this.operationRepository.delete(id);
+
+    const response = new MutationResponse();
+    response.success = isSuccess;
+    return response;
   }
 
   @Query(() => [Operation])
