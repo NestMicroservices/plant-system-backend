@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 
 import { CostConfigEntity } from '../entities/costConfig.entity';
 import { PrismaService } from '../prisma.service';
+import { Prisma } from 'generated/prisma';
 
 @Injectable()
 export class CostConfigRepository {
@@ -18,24 +19,29 @@ export class CostConfigRepository {
   }
 
   async create(entity: CostConfigEntity): Promise<CostConfigEntity> {
-    const data = {
-      operationId: entity.operationId,
-      volume: entity.volume,
-      cost: entity.cost,
-    };
-    const result = await this.prisma.costConfig.create({ data });
-    return new CostConfigEntity(result);
+    try {
+      const data = {
+        operationId: entity.operationId,
+        volume: entity.volume,
+        cost: entity.cost,
+      };
+      const result = await this.prisma.costConfig.create({ data });
+      return new CostConfigEntity(result);
+    } catch (error) {
+      this.handleError(error);
+      throw error;
+    }
   }
 
   async update(
     id: number,
     entity: Partial<CostConfigEntity>,
-  ): Promise<CostConfigEntity | undefined> {
+  ): Promise<CostConfigEntity> {
     const result = await this.prisma.costConfig.update({
       where: { id },
       data: entity,
     });
-    return result ? new CostConfigEntity(result) : undefined;
+    return new CostConfigEntity(result);
   }
 
   async delete(id: number): Promise<boolean> {
@@ -44,6 +50,17 @@ export class CostConfigRepository {
       return cost ? true : false;
     } catch {
       return false;
+    }
+  }
+
+  private handleError(error: unknown) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === 'P2002'
+    ) {
+      throw new ConflictException(
+        'A CostConfig with this volume already exists for the specified operation.',
+      );
     }
   }
 }
