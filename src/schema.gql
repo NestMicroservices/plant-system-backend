@@ -83,3 +83,12 @@ type Query {
   operations: [Operation!]!
   operationById(id: Int!): Operation
 }
+
+type Mutation {
+  createOperation(createOperationInput: CreateOperationInput!): Operation!
+}
+
+input CreateOperationInput {
+  plantId: Int!
+  name: String!
+}

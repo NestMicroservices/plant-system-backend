@@ -27,6 +27,7 @@ export class OperationRepository {
       name: entity.name,
       plantId: entity.plantId,
     };
+    console.log({ data });
     const result = await this.prisma.operation.create({ data });
     return new OperationEntity(result);
   }
