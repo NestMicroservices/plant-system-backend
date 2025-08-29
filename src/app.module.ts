@@ -5,6 +5,7 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { SampleModule } from './sample/sample.module';
 import { ConfigModule } from '@nestjs/config';
+import { CostsModule } from './costs/costs.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ConfigModule } from '@nestjs/config';
       graphiql: true,
     }),
     SampleModule,
+    CostsModule,
   ],
   controllers: [],
   providers: [],
