@@ -32,7 +32,7 @@ model Operation {
 
 model CostConfig {
   id          Int       @id @default(autoincrement())
-  operation   Operation @relation(fields: [operationId], references: [id])
+  operation   Operation @relation(fields: [operationId], references: [id], onDelete: Cascade)
   operationId Int
   volume      Int
   cost        Float
