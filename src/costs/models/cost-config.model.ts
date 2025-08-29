@@ -1,22 +1,24 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
-@ObjectType()
+@ObjectType({
+  description: 'Represents the cost configuration for an operation.',
+})
 export class CostConfig {
-  @Field()
+  @Field({ description: 'Unique identifier for the cost configuration.' })
   id: number;
 
-  @Field()
+  @Field({ description: 'Identifier of the associated operation.' })
   operationId: number;
 
-  @Field()
+  @Field({ description: 'Volume associated with this cost configuration.' })
   volume: number;
 
-  @Field()
+  @Field({ description: 'Cost value for this configuration.' })
   cost: number;
 
-  @Field()
+  @Field({ description: 'Date when this configuration was created.' })
   createdAt: Date;
 
-  @Field()
+  @Field({ description: 'Date when this configuration was last updated.' })
   updatedAt: Date;
 }
