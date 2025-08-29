@@ -40,5 +40,6 @@ model CostConfig {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
+  @@unique([volume, operationId])
   @@map("costconfig")
 }
