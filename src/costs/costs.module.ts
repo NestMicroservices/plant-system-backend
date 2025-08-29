@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
-import { CostsResolver } from './costs.resolver';
+
 import { DataModule } from 'src/data/data.module';
+import { OperationResolver } from './operation.resolver';
+import { PlantResolver } from './plant.resolver';
 
 @Module({
   imports: [DataModule],
-  providers: [CostsResolver],
+  providers: [PlantResolver, OperationResolver],
 })
 export class CostsModule {}
