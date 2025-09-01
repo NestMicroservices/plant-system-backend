@@ -94,7 +94,7 @@ type Mutation {
   updateCostConfig(updateCostConfigInput: UpdateCostConfigInput!): CostConfig!
   deleteCostConfig(id: Int!): MutationResponse!
   createOperation(createOperationInput: CreateOperationInput!): Operation!
-  updateOperation(updateOperationInput: updateOperationInput!): Operation!
+  updateOperation(updateOperationInput: UpdateOperationInput!): Operation!
   deleteOperation(id: Int!): MutationResponse!
 }
 
@@ -115,7 +115,7 @@ input CreateOperationInput {
   name: String!
 }
 
-input updateOperationInput {
+input UpdateOperationInput {
   id: Int!
   name: String!
 }
