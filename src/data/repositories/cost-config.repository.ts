@@ -1,8 +1,8 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { CostConfigEntity } from '../entities/costConfig.entity';
 import { PrismaService } from '../prisma.service';
-import { Prisma } from 'generated/prisma';
 
 @Injectable()
 export class CostConfigRepository {
@@ -55,7 +55,7 @@ export class CostConfigRepository {
 
   private handleError(error: unknown) {
     if (
-      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error instanceof PrismaClientKnownRequestError &&
       error.code === 'P2002'
     ) {
       throw new ConflictException(

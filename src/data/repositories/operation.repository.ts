@@ -1,8 +1,8 @@
-import { Injectable, ConflictException } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { OperationEntity } from '../entities/operation.entity';
 import { PrismaService } from '../prisma.service';
-import { Prisma } from 'generated/prisma';
 
 @Injectable()
 export class OperationRepository {
@@ -65,7 +65,7 @@ export class OperationRepository {
 
   private handleError(error: unknown) {
     if (
-      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error instanceof PrismaClientKnownRequestError &&
       error.code === 'P2002'
     ) {
       throw new ConflictException(
