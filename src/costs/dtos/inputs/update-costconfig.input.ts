@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import { Field, Float, InputType, Int } from '@nestjs/graphql';
-import { IsNumber, IsPositive } from 'class-validator';
+import { IsNumber, IsOptional, IsPositive } from 'class-validator';
 
 @InputType()
 export class UpdateCostConfigInput {
@@ -10,6 +10,7 @@ export class UpdateCostConfigInput {
 
   @Field(() => Int, { nullable: true })
   @IsPositive()
+  @IsOptional()
   volume?: number;
 
   @Field(() => Float)
