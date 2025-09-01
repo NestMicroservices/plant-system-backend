@@ -7,6 +7,115 @@ type Book {
   author: String!
 }
 
+"""Represents the cost configuration for an operation."""
+type CostConfig {
+  """Unique identifier for the cost configuration."""
+  id: Float!
+
+  """Identifier of the associated operation."""
+  operationId: Float!
+
+  """Volume associated with this cost configuration."""
+  volume: Float!
+
+  """Cost value for this configuration."""
+  cost: Float!
+
+  """Date when this configuration was created."""
+  createdAt: DateTime!
+
+  """Date when this configuration was last updated."""
+  updatedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+"""Represents an operation within a plant."""
+type Operation {
+  """Unique identifier for the operation."""
+  id: Float!
+
+  """Name of the operation."""
+  name: String!
+
+  """Identifier of the associated plant."""
+  plantId: Float!
+
+  """Date when this operation was created."""
+  createdAt: DateTime!
+
+  """Date when this operation was last updated."""
+  updatedAt: DateTime!
+
+  """List of cost configurations for this operation."""
+  costConfigs: [CostConfig!]
+}
+
+type MutationResponse {
+  success: Boolean!
+  message: String
+}
+
+"""Represents a plant entity."""
+type Plant {
+  """Unique identifier for the plant."""
+  id: Float!
+
+  """Name of the plant."""
+  name: String!
+
+  """Date when this plant was created."""
+  createdAt: DateTime!
+
+  """Date when this plant was last updated."""
+  updatedAt: DateTime!
+
+  """List of operations associated with this plant."""
+  operations: [Operation!]
+
+  """Unique sorted volumes from all cost configs of the plant."""
+  volumes: [Float!]
+}
+
 type Query {
   books: [Book!]!
+  costConfigs: [CostConfig!]!
+  operations: [Operation!]!
+  operationById(id: Int!): Operation
+  plants: [Plant!]!
+  plantById(id: Int!): Plant
+}
+
+type Mutation {
+  createCostConfig(createCostConfigInput: CreateCostConfigInput!): CostConfig!
+  updateCostConfig(updateCostConfigInput: UpdateCostConfigInput!): CostConfig!
+  deleteCostConfig(id: Int!): MutationResponse!
+  createOperation(createOperationInput: CreateOperationInput!): Operation!
+  updateOperation(updateOperationInput: UpdateOperationInput!): Operation!
+  deleteOperation(id: Int!): MutationResponse!
+}
+
+input CreateCostConfigInput {
+  operationId: Int!
+  volume: Int!
+  cost: Float!
+}
+
+input UpdateCostConfigInput {
+  id: Int!
+  volume: Int
+  cost: Float!
+}
+
+input CreateOperationInput {
+  plantId: Int!
+  name: String!
+}
+
+input UpdateOperationInput {
+  id: Int!
+  name: String!
 }

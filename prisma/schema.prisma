@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Plant {
+  id         Int         @id @default(autoincrement())
+  name       String      @unique
+  operations Operation[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  @@map("plant")
+}
+
+model Operation {
+  id          Int          @id @default(autoincrement())
+  name        String
+  plant       Plant        @relation(fields: [plantId], references: [id])
+  plantId     Int
+  costConfigs CostConfig[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@unique([name, plantId])
+  @@map("operation")
+}
+
+model CostConfig {
+  id          Int       @id @default(autoincrement())
+  operation   Operation @relation(fields: [operationId], references: [id], onDelete: Cascade)
+  operationId Int
+  volume      Int
+  cost        Float
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([volume, operationId])
+  @@map("costconfig")
+}
